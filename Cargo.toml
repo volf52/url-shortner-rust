@@ -17,3 +17,4 @@ rocket = "0.5.0-rc.1"
 
 [profile.release]
 lto = "fat"
+opt-level = "s"
