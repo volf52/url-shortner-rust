@@ -31,9 +31,7 @@ WORKDIR /frontend
 COPY ./frontend/package.json .
 COPY ./frontend/yarn.lock .
 
-RUN yarn install --prod \
-    && cp -R node_modules prod_modules \
-    && yarn install
+RUN yarn install
 
 FROM frontend_base as static_build
 
