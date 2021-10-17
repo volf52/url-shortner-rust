@@ -9,7 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build
+      - name: Build Rust
         run: cargo build
+      - name: Install Yarn
+        run: npm install --global yarn
+      - name: Build frontend
+        run: yarn --cwd frontend run build
       - name: Run tests
         run: cargo test

@@ -1,3 +1,6 @@
 /target
 .idea
 .vscode
+frontend/node_modules
+frontend/.svelte-kit
+frontend/build

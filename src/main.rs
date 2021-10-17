@@ -3,16 +3,9 @@ extern crate rocket;
 
 use dashmap::DashMap;
 use rand::{Rng, thread_rng};
-use rocket::response::Redirect;
-use rocket::response::status::{BadRequest, NotFound};
-use rocket::State;
+use rocket::{fs::FileServer, response::{Redirect, status::{BadRequest, NotFound}}, State};
 
 type RocketState = State<DashMap<u32, String>>;
-
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
 
 #[get("/api/get?<key>")]
 fn redirect(key: u32, state: &RocketState) -> Result<Redirect, NotFound<&str>> {
@@ -35,7 +28,13 @@ fn shorten(url: String, state: &RocketState) -> Result<String, BadRequest<&str>>
 #[launch]
 fn rocket() -> _ {
     rocket::build().manage(DashMap::<u32, String>::new())
-        .mount("/", routes![index, redirect, shorten])
+        .mount("/", routes![redirect, shorten])
+        .mount("/", if cfg!(debug_assertions) {
+            FileServer::from(rocket::fs::relative!("/frontend/build"))
+        } else {
+            FileServer::from("/app/static")
+        },
+        )
 }
 
 #[cfg(test)]
@@ -83,5 +82,12 @@ mod tests {
         let response = client.post("/api/get?key=123").dispatch();
 
         assert_eq!(response.status(), Status::NotFound);
+    }
+
+    fn static_site() {
+        let client = Client::tracked(rocket()).expect("valid rocket instance");
+        let response = client.get("/").dispatch();
+
+        assert_eq!(response.status(), Status::Ok);
     }
 }
