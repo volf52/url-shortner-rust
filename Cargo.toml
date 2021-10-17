@@ -2,6 +2,11 @@
 name = "url_shortener"
 version = "0.1.0"
 edition = "2018"
+authors = ["Arslan <rslnkrmt2552@gmail.com>"]
+
+[[bin]]
+name = "app"
+path = "src/main.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
