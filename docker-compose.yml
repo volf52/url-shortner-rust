@@ -4,4 +4,4 @@ services:
   url-shortener:
     build: .
     ports:
-      - "8013:80"
+      - "80:80"
