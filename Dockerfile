@@ -8,25 +8,27 @@ FROM rust:slim-buster as build
 
 WORKDIR /repo
 
-COPY dummy.rs .
 COPY Cargo.lock .
 COPY Cargo.toml .
 
-RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml \
-    && cargo build --release \
-    && sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
+RUN sed -i 's#src/main.rs#dummy.rs#' Cargo.toml
+RUN echo "fn main(){}" > dummy.rs
+RUN cargo build --release
+RUN sed -i 's#dummy.rs#src/main.rs#' Cargo.toml
 
 COPY --from=upx_temp /tmp/upx ./upx
 COPY src src
 
-RUN cargo build --release \
-    && ./upx --best --lzma /repo/target/release/app
+RUN cargo install --offline --path .
+RUN ./upx --best --lzma /usr/local/cargo/bin/url_shortener
 
 FROM gcr.io/distroless/cc
 
-COPY --from=build /repo/target/release/app /
+WORKDIR /app
+EXPOSE 80
 
-ENV ROCKET_ADDRESS=0.0.0.0
-EXPOSE 8000
+COPY --from=build /usr/local/cargo/bin/url_shortener /app
 
-CMD ["/app"]
+COPY Rocket.toml .
+
+CMD ["/app/url_shortener"]

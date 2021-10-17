@@ -5,7 +5,7 @@ edition = "2018"
 authors = ["Arslan <rslnkrmt2552@gmail.com>"]
 
 [[bin]]
-name = "app"
+name = "url_shortener"
 path = "src/main.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
