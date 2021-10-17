@@ -66,6 +66,22 @@ mod tests {
 
         let redirect = response.headers().get_one("Location").expect("location header");
 
-        assert_eq!(redirect, "https://duck.com")
+        assert_eq!(redirect, "https://duck.com");
+    }
+
+    #[test]
+    fn empty_url() {
+        let client = Client::tracked(rocket()).expect("valid rocket instance");
+        let response = client.post("/api/shorten?url=").dispatch();
+
+        assert_eq!(response.status(), Status::BadRequest);
+    }
+
+    #[test]
+    fn invalid_key() {
+        let client = Client::tracked(rocket()).expect("valid rocket instance");
+        let response = client.post("/api/get?key=123").dispatch();
+
+        assert_eq!(response.status(), Status::NotFound);
     }
 }
