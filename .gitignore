@@ -4,3 +4,7 @@
 frontend/node_modules
 frontend/.svelte-kit
 frontend/build
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
