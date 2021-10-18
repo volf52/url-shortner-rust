@@ -13,6 +13,8 @@ jobs:
         run: cargo build
       - name: Install Yarn
         run: npm install --global yarn
+      - name: Install frontend deps 
+        run: yarn --cwd frontend install
       - name: Build frontend
         run: yarn --cwd frontend run build
       - name: Run tests
